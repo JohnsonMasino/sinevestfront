@@ -11,6 +11,7 @@ import Home from './pages/outer/HomePage';
 // Legal Pages
 
 // Not Found Page Import
+import NotFound from './components/outside/NotFound';
 
 // Authentication Pages Imports
 
@@ -238,6 +239,7 @@ function App() {
           <Routes>
 
             {/* 404 Page */}
+            <Route path="*" element={<NotFound />} />
 
             {/* Authentication Routes */}
 
