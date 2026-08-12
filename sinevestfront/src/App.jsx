@@ -1,121 +1,257 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+// Global Imports
+import { Routes, Route } from 'react-router-dom';
+import { lazy, Suspense, useState, createContext, useContext, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import './App.css';
 
+// Public Imports
+
+// Pages Imports
+import Home from './pages/outer/HomePage';
+// Legal Pages
+
+// Not Found Page Import
+
+// Authentication Pages Imports
+
+// Protected Inner Pages (lazy-loaded)
+
+// ─────────────────────────────────────────────────────────
+// LOADING CONTEXT
+// Export this so any component in the app can call
+// useLoading() to show / hide the global spinner.
+//
+// Usage inside any component:
+//   const { showLoader, hideLoader } = useLoading();
+//   showLoader("Connecting to server...");   // optional message
+//   await someApiCall();
+//   hideLoader();
+// ─────────────────────────────────────────────────────────
+export const LoadingContext = createContext({
+  showLoader: () => {},
+  hideLoader: () => {},
+  isLoading:  false,
+  message:    "",
+});
+
+export function useLoading() {
+  return useContext(LoadingContext);
+}
+
+
+// ─────────────────────────────────────────────────────────
+// GLOBAL LOADING SPINNER OVERLAY
+// ─────────────────────────────────────────────────────────
+function GlobalLoader({ visible, message }) {
+  return (
+    <AnimatePresence>
+      {visible && (
+        <motion.div
+          key="global-loader"
+          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center"
+          style={{ background: "rgba(4,6,26,0.88)", backdropFilter: "blur(10px)" }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25 }}
+        >
+          {/* ── Spinner core ── */}
+          <div className="relative flex items-center justify-center">
+
+            {/* Outer slow ring */}
+            <motion.div
+              className="absolute rounded-full"
+              style={{
+                width:  "90px",
+                height: "90px",
+                border: "1px solid rgba(59,130,246,0.18)",
+              }}
+              animate={{ rotate: 360 }}
+              transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+            />
+
+            {/* Middle dashed ring */}
+            <motion.div
+              className="absolute rounded-full"
+              style={{
+                width:       "70px",
+                height:      "70px",
+                border:      "1px dashed rgba(167,139,250,0.22)",
+              }}
+              animate={{ rotate: -360 }}
+              transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+            />
+
+            {/* Spinning gradient arc */}
+            <motion.div
+              className="absolute rounded-full"
+              style={{
+                width:  "56px",
+                height: "56px",
+                border: "2px solid transparent",
+                borderTopColor:   "#3b82f6",
+                borderRightColor: "#a78bfa",
+                filter: "drop-shadow(0 0 6px #3b82f6) drop-shadow(0 0 10px #a78bfa44)",
+              }}
+              animate={{ rotate: 360 }}
+              transition={{ duration: 0.85, repeat: Infinity, ease: "linear" }}
+            />
+
+            {/* Inner counter-arc */}
+            <motion.div
+              className="absolute rounded-full"
+              style={{
+                width:  "42px",
+                height: "42px",
+                border: "1.5px solid transparent",
+                borderBottomColor: "#34d399",
+                borderLeftColor:   "#f472b688",
+                filter: "drop-shadow(0 0 5px #34d39977)",
+              }}
+              animate={{ rotate: -360 }}
+              transition={{ duration: 1.1, repeat: Infinity, ease: "linear" }}
+            />
+
+            {/* Centre icon */}
+            <motion.div
+              className="w-9 h-9 rounded-xl flex items-center justify-center"
+              style={{
+                background: "linear-gradient(135deg,#1e3a8a,#2563eb)",
+                border:     "1px solid rgba(96,165,250,0.45)",
+              }}
+              animate={{
+                boxShadow: [
+                  "0 0 10px rgba(37,99,235,0.35)",
+                  "0 0 28px rgba(37,99,235,0.75)",
+                  "0 0 10px rgba(37,99,235,0.35)",
+                ],
+              }}
+              transition={{ duration: 1.6, repeat: Infinity }}
+            >
+              {/* DexteraRobo "D" wordmark / pulse dot */}
+              <motion.div
+                className="w-2.5 h-2.5 rounded-full"
+                style={{
+                  background: "linear-gradient(135deg,#93c5fd,#60a5fa)",
+                  boxShadow:  "0 0 8px #60a5fa",
+                }}
+                animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
+                transition={{ duration: 0.85, repeat: Infinity }}
+              />
+            </motion.div>
+
+          </div>
+
+          {/* ── Rainbow progress bar ── */}
+          <div
+            className="mt-10 overflow-hidden rounded-full"
+            style={{
+              width:      "160px",
+              height:     "3px",
+              background: "rgba(59,130,246,0.1)",
+            }}
+          >
+            <motion.div
+              className="h-full rounded-full"
+              style={{
+                background: "linear-gradient(90deg,#3b82f6,#a78bfa,#34d399,#f472b6,#3b82f6)",
+                backgroundSize: "300% 100%",
+              }}
+              animate={{ backgroundPosition: ["0% 0%", "100% 0%", "0% 0%"] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+            />
+          </div>
+
+          {/* ── Message text ── */}
+          <motion.div
+            className="mt-5 text-center space-y-1 px-8"
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+          >
+            <p
+              style={{
+                fontFamily:    "'Orbitron', sans-serif",
+                fontSize:      "0.58rem",
+                color:         "#60a5fa",
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+              }}
+            >
+              {message || "Thinking..."}
+            </p>
+            {/* Animated ellipsis dots */}
+            <div className="flex items-center justify-center gap-1.5 mt-1">
+              {[0, 1, 2].map((i) => (
+                <motion.div
+                  key={i}
+                  className="w-1.5 h-1.5 rounded-full"
+                  style={{ background: "#3b82f6" }}
+                  animate={{ scale: [1, 1.7, 1], opacity: [0.3, 1, 0.3] }}
+                  transition={{ duration: 0.9, repeat: Infinity, delay: i * 0.22 }}
+                />
+              ))}
+            </div>
+            <p
+              style={{
+                fontFamily: "'Rajdhani', sans-serif",
+                fontSize:   "0.75rem",
+                color:      "#1e3a5f",
+                marginTop:  "6px",
+              }}
+            >
+              Please do not close or refresh this page
+            </p>
+          </motion.div>
+
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
+
+// ─────────────────────────────────────────────────────────
+// APP
+// ─────────────────────────────────────────────────────────
 function App() {
-  const [count, setCount] = useState(0)
+  const [isLoading, setIsLoading] = useState(false);
+  const [message,   setMessage]   = useState("");
+
+  const showLoader = useCallback((msg = "") => {
+    setMessage(msg);
+    setIsLoading(true);
+  }, []);
+
+  const hideLoader = useCallback(() => {
+    setIsLoading(false);
+    setMessage("");
+  }, []);
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <LoadingContext.Provider value={{ showLoader, hideLoader, isLoading, message }}>
 
-      <div className="ticks"></div>
+      {/* Global loading overlay — sits above everything */}
+      <GlobalLoader visible={isLoading} message={message} />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      <Suspense>
+          <Routes>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+            {/* 404 Page */}
+
+            {/* Authentication Routes */}
+
+            {/* Pages Routes */}
+            <Route path="/" element={<Home />} />
+
+            {/* Legal Pages Routes */}
+
+            {/* Protected Inner Routes */}
+
+          </Routes>
+      </Suspense>
+
+    </LoadingContext.Provider>
   )
 }
 
