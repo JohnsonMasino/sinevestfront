@@ -107,7 +107,7 @@ export default function Footer() {
       // background can never render transparent, even if a class gets
       // missed during Tailwind's content scan.
       style={{ background: "linear-gradient(175deg, #123a91 0%, #0f2557 45%, #0a1930 100%)" }}
-      className="relative w-full overflow-hidden mt-500 font-body text-blue-100"
+      className="relative w-full overflow-hidden font-body text-blue-100"
     >
       {/* decorative ambient glows — purely visual, kept subtle */}
       <div aria-hidden="true" className="pointer-events-none absolute -top-32 -left-24 h-72 w-72 rounded-full bg-blue-500/20 blur-3xl" />
