@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { NavLink } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -112,13 +113,22 @@ export default function Header() {
   return (
     <header
       className={`sticky top-0 z-50 w-full bg-white/95 backdrop-blur border-b transition-shadow duration-300 font-body ${
-        scrolled ? "shadow-lg shadow-slate-900/5 border-transparent" : "border-slate-100"
+        scrolled
+          ? "shadow-lg shadow-slate-900/5 border-transparent"
+          : "border-slate-100"
       }`}
     >
       <div className="mx-auto grid h-16 md:h-[76px] max-w-7xl grid-cols-[auto_1fr_auto] md:grid-cols-3 items-center gap-4 px-5 md:px-8">
         {/* ---------- Left: Logo (+ wordmark on tablet/desktop only) ---------- */}
-        <NavLink to="/" className="flex items-center gap-2.5 justify-self-start min-w-0">
-          <img src="/logo.png" alt="Sinevest logo" className="h-8 md:h-9 w-auto object-contain" />
+        <NavLink
+          to="/"
+          className="flex items-center gap-2.5 justify-self-start min-w-0"
+        >
+          <img
+            src="/logo.png"
+            alt="Sinevest logo"
+            className="h-8 md:h-9 w-auto object-contain"
+          />
           <span className="hidden md:inline-flex font-display font-bold text-xl tracking-tight whitespace-nowrap">
             <span className="text-slate-900">Sine</span>
             <span className="text-blue-600">vest</span>
@@ -148,7 +158,13 @@ export default function Header() {
               fill="none"
               className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5"
             >
-              <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <path
+                d="M5 12h14M13 6l6 6-6 6"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
           </motion.button>
         </div>
@@ -190,18 +206,32 @@ export default function Header() {
         </button>
       </div>
 
-      {/* ---------- Mobile menu overlay ---------- */}
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            className="fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-[2px] md:hidden"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            onClick={() => setMenuOpen(false)}
-          >
-            {/*
+      {/*
+        ---------- Mobile menu overlay ----------
+        Rendered through a portal straight into document.body. The
+        <header> above is `sticky` + `z-50`, which creates its own
+        stacking context — any element elsewhere on the page with a
+        higher (or later-painted, equal) z-index would then sit above
+        the ENTIRE header subtree, sidebar included, no matter how high
+        we set z-[100] on the overlay itself, because that z-index is
+        only compared *inside* the header's local stacking context.
+        Portaling out of <header> and into <body> escapes that context
+        entirely, so z-[100] is now compared at the true document root
+        and the sidebar reliably paints above everything else.
+      */}
+      {typeof document !== "undefined" &&
+        createPortal(
+          <AnimatePresence>
+            {menuOpen && (
+              <motion.div
+                className="fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-[2px] md:hidden"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.25 }}
+                onClick={() => setMenuOpen(false)}
+              >
+                {/*
               Sidebar panel — palette now matches Footer.jsx exactly:
               same 175deg gradient stops, same font-body base, same
               blue-100/amber-400 text treatment.
@@ -212,134 +242,171 @@ export default function Header() {
               decorative blurred glows inside the panel, instead of the
               gradient/glow escaping and letting the backdrop show through.
             */}
-            <motion.div
-              role="dialog"
-              aria-modal="true"
-              onClick={(e) => e.stopPropagation()}
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "tween", ease: [0.4, 0, 0.2, 1], duration: 0.35 }}
-              style={{ background: "linear-gradient(175deg, #123a91 0%, #0f2557 45%, #0a1930 100%)" }}
-              className="absolute right-0 top-0 flex h-full w-[86vw] max-w-[380px] flex-col overflow-hidden px-7 pb-8 pt-6 shadow-2xl font-body text-blue-100"
-            >
-              {/* decorative ambient glows — same treatment as the footer */}
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full bg-blue-500/20 blur-3xl"
-              />
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute bottom-0 -left-16 h-56 w-56 rounded-full bg-amber-400/10 blur-3xl"
-              />
-
-              <button
-                type="button"
-                aria-label="Close menu"
-                onClick={() => setMenuOpen(false)}
-                className="relative ml-auto flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white transition-all hover:rotate-90 hover:bg-white/15"
-              >
-                <svg viewBox="0 0 24 24" fill="none" className="h-[18px] w-[18px]">
-                  <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                </svg>
-              </button>
-
-              {/* Logo + wordmark, matching the footer's brand mark styling */}
-              <div className="relative mt-5 flex items-center gap-2.5">
-                <img src="/logo.png" alt="Sinevest logo" className="h-7 w-auto object-contain" />
-                <span className="font-display font-bold text-lg tracking-tight">
-                  <span className="text-white">Sine</span>
-                  <span className="text-amber-400">vest</span>
-                </span>
-              </div>
-
-              <motion.nav
-                aria-label="Primary mobile"
-                className="relative mt-8"
-                initial="closed"
-                animate="open"
-                variants={{
-                  open: { transition: { staggerChildren: 0.06, delayChildren: 0.1 } },
-                  closed: {},
-                }}
-              >
-                <ul className="flex flex-col gap-1">
-                  {NAV_LINKS.map((link) => (
-                    <motion.li
-                      key={link.id}
-                      variants={{
-                        open: { opacity: 1, x: 0 },
-                        closed: { opacity: 0, x: 24 },
-                      }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <NavLink
-                        to={link.to}
-                        end={link.end}
-                        onClick={() => setMenuOpen(false)}
-                        className={({ isActive }) =>
-                          `relative block rounded-xl border-b border-white/10 py-3.5 font-display text-xl font-semibold transition-all ${
-                            isActive ? "pl-5 text-white bg-white/10" : "pl-3 text-blue-100/80 hover:bg-white/5 hover:text-white"
-                          }`
-                        }
-                      >
-                        {({ isActive }) => (
-                          <>
-                            {isActive && (
-                              <motion.span
-                                layoutId="mobile-active-bar"
-                                className="absolute left-0 top-1/2 h-[22px] w-1 -translate-y-1/2 rounded bg-amber-400"
-                              />
-                            )}
-                            {link.label}
-                          </>
-                        )}
-                      </NavLink>
-                    </motion.li>
-                  ))}
-                </ul>
-              </motion.nav>
-
-              {/* Auth actions mirrored inside the sidebar for quick access */}
-              <div className="relative mt-8 flex flex-col gap-2.5">
-                <button
-                  type="button"
-                  className="rounded-full border border-white/25 bg-white/5 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white/15"
-                  onClick={() => setMenuOpen(false)}
+                <motion.div
+                  role="dialog"
+                  aria-modal="true"
+                  onClick={(e) => e.stopPropagation()}
+                  initial={{ x: "100%" }}
+                  animate={{ x: 0 }}
+                  exit={{ x: "100%" }}
+                  transition={{
+                    type: "tween",
+                    ease: [0.4, 0, 0.2, 1],
+                    duration: 0.35,
+                  }}
+                  style={{
+                    background:
+                      "linear-gradient(175deg, #123a91 0%, #0f2557 45%, #0a1930 100%)",
+                  }}
+                  className="absolute right-0 top-0 flex h-full w-[86vw] max-w-[380px] flex-col overflow-hidden px-7 pb-8 pt-6 shadow-2xl font-body text-blue-100"
                 >
-                  Log In
-                </button>
-                <button
-                  type="button"
-                  className="rounded-full bg-amber-400 px-5 py-2.5 text-sm font-bold text-slate-900 shadow-md shadow-amber-400/30 transition-transform hover:-translate-y-0.5"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  Sign Up
-                </button>
-              </div>
+                  {/* decorative ambient glows — same treatment as the footer */}
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full bg-blue-500/20 blur-3xl"
+                  />
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute bottom-0 -left-16 h-56 w-56 rounded-full bg-amber-400/10 blur-3xl"
+                  />
 
-              {/* Social row — hover state now matches the footer's amber treatment */}
-              <div className="relative mt-auto flex items-center gap-3.5 pt-6 border-t border-white/10">
-                {SOCIAL_LINKS.map((social) => (
-                  <motion.a
-                    key={social.id}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={social.label}
-                    whileHover={{ y: -3, backgroundColor: "#fbbf24", color: "#0a1930" }}
-                    className="flex h-[38px] w-[38px] items-center justify-center rounded-full border border-white/20 bg-white/5 text-white"
+                  <button
+                    type="button"
+                    aria-label="Close menu"
+                    onClick={() => setMenuOpen(false)}
+                    className="relative ml-auto flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white transition-all hover:rotate-90 hover:bg-white/15"
                   >
-                    <svg viewBox="0 0 24 24" fill="currentColor" className="h-[17px] w-[17px]">
-                      <path d={social.path} />
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      className="h-[18px] w-[18px]"
+                    >
+                      <path
+                        d="M6 6l12 12M18 6L6 18"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                      />
                     </svg>
-                  </motion.a>
-                ))}
-              </div>
-            </motion.div>
-          </motion.div>
+                  </button>
+
+                  {/* Logo + wordmark, matching the footer's brand mark styling */}
+                  <div className="relative mt-5 flex items-center gap-2.5">
+                    <img
+                      src="/logo.png"
+                      alt="Sinevest logo"
+                      className="h-7 w-auto object-contain"
+                    />
+                    <span className="font-display font-bold text-lg tracking-tight">
+                      <span className="text-white">Sine</span>
+                      <span className="text-amber-400">vest</span>
+                    </span>
+                  </div>
+
+                  <motion.nav
+                    aria-label="Primary mobile"
+                    className="relative mt-8"
+                    initial="closed"
+                    animate="open"
+                    variants={{
+                      open: {
+                        transition: {
+                          staggerChildren: 0.06,
+                          delayChildren: 0.1,
+                        },
+                      },
+                      closed: {},
+                    }}
+                  >
+                    <ul className="flex flex-col gap-1">
+                      {NAV_LINKS.map((link) => (
+                        <motion.li
+                          key={link.id}
+                          variants={{
+                            open: { opacity: 1, x: 0 },
+                            closed: { opacity: 0, x: 24 },
+                          }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <NavLink
+                            to={link.to}
+                            end={link.end}
+                            onClick={() => setMenuOpen(false)}
+                            className={({ isActive }) =>
+                              `relative block rounded-xl border-b border-white/10 py-3.5 font-display text-xl font-semibold transition-all ${
+                                isActive
+                                  ? "pl-5 text-white bg-white/10"
+                                  : "pl-3 text-blue-100/80 hover:bg-white/5 hover:text-white"
+                              }`
+                            }
+                          >
+                            {({ isActive }) => (
+                              <>
+                                {isActive && (
+                                  <motion.span
+                                    layoutId="mobile-active-bar"
+                                    className="absolute left-0 top-1/2 h-[22px] w-1 -translate-y-1/2 rounded bg-amber-400"
+                                  />
+                                )}
+                                {link.label}
+                              </>
+                            )}
+                          </NavLink>
+                        </motion.li>
+                      ))}
+                    </ul>
+                  </motion.nav>
+
+                  {/* Auth actions mirrored inside the sidebar for quick access */}
+                  <div className="relative mt-8 flex flex-col gap-2.5">
+                    <button
+                      type="button"
+                      className="rounded-full border border-white/25 bg-white/5 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white/15"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      Log In
+                    </button>
+                    <button
+                      type="button"
+                      className="rounded-full bg-amber-400 px-5 py-2.5 text-sm font-bold text-slate-900 shadow-md shadow-amber-400/30 transition-transform hover:-translate-y-0.5"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      Sign Up
+                    </button>
+                  </div>
+
+                  {/* Social row — hover state now matches the footer's amber treatment */}
+                  <div className="relative mt-auto flex items-center gap-3.5 pt-6 border-t border-white/10">
+                    {SOCIAL_LINKS.map((social) => (
+                      <motion.a
+                        key={social.id}
+                        href={social.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={social.label}
+                        whileHover={{
+                          y: -3,
+                          backgroundColor: "#fbbf24",
+                          color: "#0a1930",
+                        }}
+                        className="flex h-[38px] w-[38px] items-center justify-center rounded-full border border-white/20 bg-white/5 text-white"
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          className="h-[17px] w-[17px]"
+                        >
+                          <path d={social.path} />
+                        </svg>
+                      </motion.a>
+                    ))}
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>,
+          document.body,
         )}
-      </AnimatePresence>
     </header>
   );
 }
@@ -368,10 +435,16 @@ function DesktopNavLink({ link }) {
                 <motion.span
                   className="absolute inline-flex h-full w-full rounded-full bg-emerald-400"
                   animate={{ scale: [1, 2.2], opacity: [0.6, 0] }}
-                  transition={{ duration: 1.4, repeat: Infinity, ease: "easeOut" }}
+                  transition={{
+                    duration: 1.4,
+                    repeat: Infinity,
+                    ease: "easeOut",
+                  }}
                 />
               )}
-              <span className={`relative inline-flex h-1.5 w-1.5 rounded-full ${isActive ? "bg-emerald-500" : "bg-slate-300"}`} />
+              <span
+                className={`relative inline-flex h-1.5 w-1.5 rounded-full ${isActive ? "bg-emerald-500" : "bg-slate-300"}`}
+              />
             </span>
           )}
 
@@ -392,7 +465,11 @@ function DesktopNavLink({ link }) {
             </AnimatePresence>
           )}
 
-          <span className={link.id === "about" && isActive ? "tracking-wide" : ""}>{link.label}</span>
+          <span
+            className={link.id === "about" && isActive ? "tracking-wide" : ""}
+          >
+            {link.label}
+          </span>
 
           {link.id === "about" && (
             <AnimatePresence>
