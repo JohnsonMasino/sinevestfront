@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import api from "../../components/api";
+import api from "../../components/Api";
 
 /**
  * Sinevest — Reset Password Confirm
