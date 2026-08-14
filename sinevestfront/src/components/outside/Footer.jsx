@@ -156,7 +156,7 @@ export default function Footer() {
                   />
                   <circle cx="12" cy="10" r="2.4" stroke="currentColor" strokeWidth="1.6" />
                 </svg>
-                <span>12 Ademola Adetokunbo Street, Victoria Island, Lagos, Nigeria</span>
+                <span>42 Willowbrook Lane, London, SW1A 2AB United Kingdom.</span>
               </p>
             </div>
           </motion.div>
@@ -268,50 +268,7 @@ export default function Footer() {
             </div>
           </motion.div>
         </div>
-
-        {/* ================= Certification strip ================= */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.4 }}
-          transition={{ duration: 0.4 }}
-          className="mt-14 border-t border-white/10 py-6"
-        >
-          <Link
-            to="/certificate"
-            className="group flex flex-col items-center justify-between gap-4 rounded-xl border border-white/15 bg-white/5 px-6 py-4 text-center backdrop-blur-sm transition-all hover:border-amber-400/50 hover:bg-white/10 sm:flex-row sm:text-left"
-          >
-            <div className="flex items-center gap-3">
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-400/15 text-amber-300">
-                <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">
-                  <path
-                    d="m12 2 8 3v6c0 5-3.4 8.6-8 11-4.6-2.4-8-6-8-11V5l8-3Z"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    strokeLinejoin="round"
-                  />
-                  <path d="m9 12 2 2 4-4.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </span>
-              <div>
-                <p className="font-display text-sm font-semibold text-white">Licensed &amp; Regulated</p>
-                <p className="text-xs text-blue-100/60">View our company registration and compliance certificate</p>
-              </div>
-            </div>
-
-            <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-amber-400">
-              View Certificate
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
-              >
-                <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </span>
-          </Link>
-        </motion.div>
-
+        
         {/* ================= Bottom bar ================= */}
         <div className="border-t border-white/10 py-6 text-center">
           <p className="text-xs text-blue-100/50">
