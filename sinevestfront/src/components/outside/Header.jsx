@@ -49,6 +49,8 @@ import { AnimatePresence, motion } from "framer-motion";
  * - Put your logo file at:  /public/logo.png
  * - This assumes <Header /> is rendered inside a <BrowserRouter>.
  * - Replace the social hrefs in SOCIAL_LINKS with your real profiles.
+ * - Auth buttons (Log In / Sign Up) navigate to /login and /register
+ *   respectively, in both the desktop header and the mobile sidebar.
  * ------------------------------------------------------------------
  */
 
@@ -85,6 +87,10 @@ const SOCIAL_LINKS = [
     path: "M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56Z",
   },
 ];
+
+// motion-enabled NavLink — lets the existing motion.button hover/tap
+// animations be applied directly to a real, navigable <a> element.
+const MotionNavLink = motion(NavLink);
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -137,17 +143,17 @@ export default function Header() {
 
         {/* ---------- Center: Auth buttons ---------- */}
         <div className="flex items-center gap-2 md:gap-3 justify-self-center">
-          <motion.button
-            type="button"
+          <MotionNavLink
+            to="/login"
             whileHover={{ y: -1 }}
             whileTap={{ scale: 0.96 }}
             className="rounded-full border-[1.5px] border-slate-200 px-3.5 md:px-5 py-2 text-xs md:text-sm font-semibold text-slate-800 transition-colors hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50"
           >
             Log In
-          </motion.button>
+          </MotionNavLink>
 
-          <motion.button
-            type="button"
+          <MotionNavLink
+            to="/register"
             whileHover={{ y: -2 }}
             whileTap={{ scale: 0.96 }}
             className="group flex items-center gap-1.5 rounded-full bg-gradient-to-br from-blue-600 to-slate-900 px-3.5 md:px-5 py-2 text-xs md:text-sm font-semibold text-white shadow-md shadow-blue-600/30 transition-shadow hover:shadow-lg hover:shadow-blue-600/40"
@@ -166,7 +172,7 @@ export default function Header() {
                 strokeLinejoin="round"
               />
             </svg>
-          </motion.button>
+          </MotionNavLink>
         </div>
 
         {/* ---------- Right (desktop): Nav links ---------- */}
@@ -359,20 +365,20 @@ export default function Header() {
 
                   {/* Auth actions mirrored inside the sidebar for quick access */}
                   <div className="relative mt-8 flex flex-col gap-2.5">
-                    <button
-                      type="button"
-                      className="rounded-full border border-white/25 bg-white/5 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white/15"
+                    <NavLink
+                      to="/login"
                       onClick={() => setMenuOpen(false)}
+                      className="rounded-full border border-white/25 bg-white/5 px-5 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-white/15"
                     >
                       Log In
-                    </button>
-                    <button
-                      type="button"
-                      className="rounded-full bg-amber-400 px-5 py-2.5 text-sm font-bold text-slate-900 shadow-md shadow-amber-400/30 transition-transform hover:-translate-y-0.5"
+                    </NavLink>
+                    <NavLink
+                      to="/register"
                       onClick={() => setMenuOpen(false)}
+                      className="rounded-full bg-amber-400 px-5 py-2.5 text-center text-sm font-bold text-slate-900 shadow-md shadow-amber-400/30 transition-transform hover:-translate-y-0.5"
                     >
                       Sign Up
-                    </button>
+                    </NavLink>
                   </div>
 
                   {/* Social row — hover state now matches the footer's amber treatment */}
