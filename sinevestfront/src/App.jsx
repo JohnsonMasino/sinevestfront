@@ -5,10 +5,18 @@ import { motion, AnimatePresence } from 'framer-motion';
 import './App.css';
 
 // Public Imports
+import ScrollToTop from './components/ScrolltoTop';
 
 // Pages Imports
 import Home from './pages/outer/HomePage';
+import Contact from './pages/outer/ContactPage';  
+import About from './pages/outer/AboutPage';
+import Invest from './pages/outer/InvestPage';
+
 // Legal Pages
+import Faqs from './pages/legal/Faq';
+import PrivacyPolicy from './pages/legal/Privacy';
+import Terms from './pages/legal/Terms';
 
 // Not Found Page Import
 import NotFound from './components/outside/NotFound';
@@ -17,16 +25,7 @@ import NotFound from './components/outside/NotFound';
 
 // Protected Inner Pages (lazy-loaded)
 
-// ─────────────────────────────────────────────────────────
-// LOADING CONTEXT
-// Export this so any component in the app can call
-// useLoading() to show / hide the global spinner.
-//
-// Usage inside any component:
-//   const { showLoader, hideLoader } = useLoading();
-//   showLoader("Connecting to server...");   // optional message
-//   await someApiCall();
-//   hideLoader();
+
 // ─────────────────────────────────────────────────────────
 export const LoadingContext = createContext({
   showLoader: () => {},
@@ -232,6 +231,9 @@ function App() {
   return (
     <LoadingContext.Provider value={{ showLoader, hideLoader, isLoading, message }}>
 
+      {/* Scrolls the window to the top on every route change */}
+      <ScrollToTop />
+
       {/* Global loading overlay — sits above everything */}
       <GlobalLoader visible={isLoading} message={message} />
 
@@ -245,8 +247,14 @@ function App() {
 
             {/* Pages Routes */}
             <Route path="/" element={<Home />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/investments" element={<Invest />} />
 
             {/* Legal Pages Routes */}
+            <Route path="/faqs" element={<Faqs />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<Terms />} />
 
             {/* Protected Inner Routes */}
 
