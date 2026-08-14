@@ -6,6 +6,7 @@ import './App.css';
 
 // Public Imports
 import ScrollToTop from './components/ScrolltoTop';
+import PrivateRoute from './components/PrivateRoute';
 
 // Pages Imports
 import Home from './pages/outer/HomePage';
@@ -28,6 +29,7 @@ import ForgotPass from './pages/auth/ForgotPass';
 import PassConfirm from './pages/auth/PasConfirm';
 
 // Protected Inner Pages (lazy-loaded)
+const DashboardPage = lazy(() => import("./pages/inner/DashPage"));
 
 
 // ─────────────────────────────────────────────────────────
@@ -264,7 +266,10 @@ function App() {
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms" element={<Terms />} />
 
-            {/* Protected Inner Routes */}
+            {/* Private routes */}
+            <Route element={<PrivateRoute />}>
+              <Route path="/dashboard" element={<DashboardPage />} />
+            </Route>
 
           </Routes>
       </Suspense>
