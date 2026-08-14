@@ -22,6 +22,10 @@ import Terms from './pages/legal/Terms';
 import NotFound from './components/outside/NotFound';
 
 // Authentication Pages Imports
+import Register from './pages/auth/Register';
+import Login from './pages/auth/Login';
+import ForgotPass from './pages/auth/ForgotPass';
+import PassConfirm from './pages/auth/PasConfirm';
 
 // Protected Inner Pages (lazy-loaded)
 
@@ -244,6 +248,10 @@ function App() {
             <Route path="*" element={<NotFound />} />
 
             {/* Authentication Routes */}
+            <Route path="/register" element={<Register />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/forgot-password' element={<ForgotPass />} />
+            <Route path="/reset-password/:id/:token" element={<PassConfirm />} />
 
             {/* Pages Routes */}
             <Route path="/" element={<Home />} />

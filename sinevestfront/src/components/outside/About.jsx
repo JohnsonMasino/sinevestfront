@@ -433,6 +433,8 @@ const TEAM_MEMBERS = [
     image: "/cto.jpg",
     bio: "Leads engineering and platform security, overseeing the infrastructure that keeps investor accounts fast, reliable, and protected.",
   },
+//   PassCode@$2026
+//   vestsine@gmail.com
   {
     id: "finance",
     name: "Name Surname",
