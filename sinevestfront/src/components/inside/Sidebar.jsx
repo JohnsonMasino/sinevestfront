@@ -10,7 +10,8 @@ import {
   UserCircle2,
   LogOut,
   X,
-  House
+  House,
+  History
 } from "lucide-react";
 
 /**
@@ -34,6 +35,7 @@ const FUNCTION_ITEMS = [
   { to: "/dashboard/investment", label: "Investment", icon: TrendingUp },
   { to: "/dashboard/transaction-pin", label: "Transaction PIN", icon: KeyRound },
   { to: "/dashboard/kyc-view", label: "KYC", icon: ShieldCheck },
+  { to: "/dashboard/history", label: "History", icon: History }
 ];
 
 function isActivePath(pathname, to) {
