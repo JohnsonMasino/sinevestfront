@@ -33,7 +33,7 @@ const FUNCTION_ITEMS = [
   { to: "/dashboard/withdraw", label: "Withdraw", icon: ArrowUpFromLine },
   { to: "/dashboard/investment", label: "Investment", icon: TrendingUp },
   { to: "/dashboard/transaction-pin", label: "Transaction PIN", icon: KeyRound },
-  { to: "/dashboard/kyc", label: "KYC", icon: ShieldCheck },
+  { to: "/dashboard/kyc-view", label: "KYC", icon: ShieldCheck },
 ];
 
 function isActivePath(pathname, to) {

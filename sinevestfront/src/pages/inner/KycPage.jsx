@@ -1,10 +1,10 @@
 import Head from '../../components/inside/Head';
-import Home from '../../components/inside/Dash';
+import Kyc from '../../components/inside/KycView';
 
 export default function DashPage() {
   return (
     <Head>
-      <Home />
+      <Kyc />
     </Head>
   );
 }

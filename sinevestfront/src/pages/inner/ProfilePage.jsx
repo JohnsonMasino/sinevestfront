@@ -1,10 +1,10 @@
 import Head from '../../components/inside/Head';
-import Home from '../../components/inside/Dash';
+import Profile from '../../components/inside/Profile';
 
 export default function DashPage() {
   return (
     <Head>
-      <Home />
+      <Profile />
     </Head>
   );
 }

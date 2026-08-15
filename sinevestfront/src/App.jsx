@@ -30,6 +30,9 @@ import PassConfirm from './pages/auth/PasConfirm';
 
 // Protected Inner Pages (lazy-loaded)
 const DashboardPage = lazy(() => import("./pages/inner/DashPage"));
+const ProfilePage = lazy(() => import("./pages/inner/ProfilePage"));
+const KycPage = lazy(() => import("./pages/inner/KycPage"));
+const KycEdit = lazy(() => import("./components/inside/KycEdit"));
 
 
 // ─────────────────────────────────────────────────────────
@@ -269,6 +272,9 @@ function App() {
             {/* Private routes */}
             <Route element={<PrivateRoute />}>
               <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/dashboard/profile" element={<ProfilePage />} />
+              <Route path="/dashboard/kyc-view" element={<KycPage />} />
+              <Route path="/dashboard/kyc-edit" element={<KycEdit />} />
             </Route>
 
           </Routes>
