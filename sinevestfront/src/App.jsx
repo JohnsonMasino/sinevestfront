@@ -33,6 +33,11 @@ const DashboardPage = lazy(() => import("./pages/inner/DashPage"));
 const ProfilePage = lazy(() => import("./pages/inner/ProfilePage"));
 const KycPage = lazy(() => import("./pages/inner/KycPage"));
 const KycEdit = lazy(() => import("./components/inside/KycEdit"));
+const WalletLedger = lazy(() => import("./components/inside/WalletLedger"));
+const HistoryPage = lazy(() => import("./pages/inner/HistoryPage"));
+const DepositPage = lazy(() => import("./pages/inner/DepositPage"));
+const WithdrawPage = lazy(() => import("./pages/inner/WithdrawPage"));
+const PinPage = lazy(() => import("./pages/inner/PinPage"));
 
 
 // ─────────────────────────────────────────────────────────
@@ -275,6 +280,11 @@ function App() {
               <Route path="/dashboard/profile" element={<ProfilePage />} />
               <Route path="/dashboard/kyc-view" element={<KycPage />} />
               <Route path="/dashboard/kyc-edit" element={<KycEdit />} />
+              <Route path="/dashboard/wallet-ledger" element={<WalletLedger />} />
+              <Route path="/dashboard/history" element={<HistoryPage />} />
+              <Route path="/dashboard/deposit" element={<DepositPage />} />
+              <Route path="/dashboard/withdraw" element={<WithdrawPage />} />
+              <Route path="/dashboard/transaction-pin" element={<PinPage />} />
             </Route>
 
           </Routes>
