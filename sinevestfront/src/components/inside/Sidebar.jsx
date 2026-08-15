@@ -10,6 +10,7 @@ import {
   UserCircle2,
   LogOut,
   X,
+  House
 } from "lucide-react";
 
 /**
@@ -27,6 +28,7 @@ const NAVY_GRADIENT =
   "linear-gradient(175deg, #123a91 0%, #0f2557 45%, #0a1930 100%)";
 
 const FUNCTION_ITEMS = [
+  { to: "/dashboard/", label: "Home", icon: House },
   { to: "/dashboard/deposit", label: "Deposit", icon: Banknote },
   { to: "/dashboard/withdraw", label: "Withdraw", icon: ArrowUpFromLine },
   { to: "/dashboard/investment", label: "Investment", icon: TrendingUp },
