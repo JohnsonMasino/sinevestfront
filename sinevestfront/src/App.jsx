@@ -38,6 +38,8 @@ const HistoryPage = lazy(() => import("./pages/inner/HistoryPage"));
 const DepositPage = lazy(() => import("./pages/inner/DepositPage"));
 const WithdrawPage = lazy(() => import("./pages/inner/WithdrawPage"));
 const PinPage = lazy(() => import("./pages/inner/PinPage"));
+const TradePage = lazy(() => import("./pages/inner/TradePage"));
+const TradeHistoryPage = lazy(() => import("./components/inside/TradeHistory"));
 
 
 // ─────────────────────────────────────────────────────────
@@ -285,6 +287,8 @@ function App() {
               <Route path="/dashboard/deposit" element={<DepositPage />} />
               <Route path="/dashboard/withdraw" element={<WithdrawPage />} />
               <Route path="/dashboard/transaction-pin" element={<PinPage />} />
+              <Route path="/dashboard/investment" element={<TradePage />} />
+              <Route path="/dashboard/investment-history" element={<TradeHistoryPage />} />
             </Route>
 
           </Routes>
