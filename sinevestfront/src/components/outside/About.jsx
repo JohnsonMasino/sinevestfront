@@ -419,7 +419,7 @@ function AboutAchievements() {
 const TEAM_MEMBERS = [
   {
     id: "ceo",
-    name: "Name Surname",
+    name: "Robert Charles",
     role: "Chief Executive Officer",
     initials: "CEO",
     image: "/ceo.jpg",
@@ -427,7 +427,7 @@ const TEAM_MEMBERS = [
   },
   {
     id: "cto",
-    name: "Name Surname",
+    name: "Darnell Isaiah",
     role: "Chief Technology Officer",
     initials: "CTO",
     image: "/cto.jpg",
@@ -437,7 +437,7 @@ const TEAM_MEMBERS = [
 //   vestsine@gmail.com
   {
     id: "finance",
-    name: "Name Surname",
+    name: "Petra Ursula",
     role: "Financial Manager",
     initials: "FM",
     image: "/fin.jpg",
